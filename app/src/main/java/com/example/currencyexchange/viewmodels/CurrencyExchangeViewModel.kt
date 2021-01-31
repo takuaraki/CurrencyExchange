@@ -8,7 +8,7 @@ import com.example.currencyexchange.models.data.Money
 import com.example.currencyexchange.models.repository.CurrencyExchangedRepository
 
 class CurrencyExchangeViewModel(
-    val currencyExchangeRepository: CurrencyExchangedRepository
+    private val currencyExchangeRepository: CurrencyExchangedRepository
 ): ViewModel() {
     class Factory constructor(
         private val currencyExchangeRepository: CurrencyExchangedRepository
