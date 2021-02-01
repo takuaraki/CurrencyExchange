@@ -25,7 +25,7 @@ import com.example.currencyexchange.viewmodels.CurrencyExchangeViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
-class MainActivity : AppCompatActivity() {
+class CurrencyExchangeActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var viewModel: CurrencyExchangeViewModel

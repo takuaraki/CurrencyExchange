@@ -11,7 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CurrencyExchange"
         android:usesCleartextTraffic="true">
-        <activity android:name=".views.MainActivity">
+        <activity android:name=".views.CurrencyExchangeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
