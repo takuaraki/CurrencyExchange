@@ -46,21 +46,28 @@ class MainActivity : AppCompatActivity() {
             viewModel.onAmountTextChanged(text.toString())
         }
 
-        binding.currencySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val spinner: Spinner = parent as Spinner
-                val code: String = spinner.selectedItem as String
-                viewModel.onSelectCurrencyCode(code)
-            }
+        binding.currencySpinner.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    val spinner: Spinner = parent as Spinner
+                    val code: String = spinner.selectedItem as String
+                    viewModel.onSelectCurrencyCode(code)
+                }
 
-            override fun onNothingSelected(p0: AdapterView<*>?) {
+                override fun onNothingSelected(p0: AdapterView<*>?) {
+                }
             }
-        }
     }
 
     private fun handleOutputs() {
         viewModel.supportedCurrencyCodes.observe(this) { currencyCodes ->
-            binding.currencySpinner.adapter = ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, currencyCodes)
+            binding.currencySpinner.adapter =
+                ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, currencyCodes)
         }
 
         viewModel.exchanged.observe(this) { exchangedList ->
@@ -80,4 +87,8 @@ class DebugRepo : CurrencyRepository {
                 ExchangeRate(from = "USD", to = "CCC", rate = 25f),
             )
         )
+
+    override suspend fun load() {
+        // do nothing
+    }
 }
