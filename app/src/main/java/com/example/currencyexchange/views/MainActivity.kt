@@ -7,8 +7,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
 import com.example.currencyexchange.R
 import com.example.currencyexchange.databinding.ActivityMainBinding
+import com.example.currencyexchange.models.data.ExchangeRate
 import com.example.currencyexchange.models.data.Money
 import com.example.currencyexchange.models.repository.ExchangeRateRepository
+import com.example.currencyexchange.models.store.CurrencyExchangeStore
+import com.example.currencyexchange.models.store.CurrencyExchangeStoreImpl
 import com.example.currencyexchange.viewmodels.CurrencyExchangeViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
@@ -23,7 +26,7 @@ class MainActivity : AppCompatActivity() {
 
         val viewModel = ViewModelProvider(
             this,
-            CurrencyExchangeViewModel.Factory(DebugRepo())
+            CurrencyExchangeViewModel.Factory(CurrencyExchangeStoreImpl(repository = DebugRepo()))
         ).get(CurrencyExchangeViewModel::class.java)
 
         val adapter = ExchangedListAdapter()
@@ -35,15 +38,14 @@ class MainActivity : AppCompatActivity() {
 }
 
 class DebugRepo : ExchangeRateRepository {
-    override val exchangeRates: Flow<List<Money>>
+    override val exchangeRates: Flow<List<ExchangeRate>>
         get() = flowOf(
             listOf(
-                Money(amount = 100, currencyCode = "JPY"),
-                Money(amount = 1, currencyCode = "USD"),
-                Money(amount = 300, currencyCode = "AAA"),
-                Money(amount = 1000, currencyCode = "BBB"),
-                Money(amount = 50, currencyCode = "CCC"),
-                Money(amount = 25, currencyCode = "DDD"),
+                ExchangeRate(from = "USD", to = "USD", rate = 1f),
+                ExchangeRate(from = "USD", to = "JPY", rate = 100f),
+                ExchangeRate(from = "USD", to = "AAA", rate = 50f),
+                ExchangeRate(from = "USD", to = "BBB", rate = 1000f),
+                ExchangeRate(from = "USD", to = "CCC", rate = 25f),
             )
         )
 }
