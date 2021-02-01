@@ -40,7 +40,7 @@ class MainActivity : AppCompatActivity() {
             CurrencyExchangeViewModel.Factory(
                 CurrencyStoreImpl(
                     repository = CurrencyRepositoryImpl(
-                        api = DebugAPI(),
+                        api = CurrencyAPI.create(),
                         dao = Room.databaseBuilder(
                             this,
                             AppDatabase::class.java,
@@ -98,21 +98,5 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         viewModel.onResume()
-    }
-}
-
-class DebugAPI : CurrencyAPI {
-    override suspend fun getExchangeRates(): ExchangeRatesResponse {
-        return ExchangeRatesResponse(
-            quotes = mapOf(
-                "USDUSD" to 1f,
-                "USDJPY" to 100f,
-                "USDAAA" to 50f,
-                "USDBBB" to 1000f,
-                "USDCCC" to 25f,
-                "USDDDD" to 10f,
-                "USDEEE" to 5f,
-            )
-        )
     }
 }
