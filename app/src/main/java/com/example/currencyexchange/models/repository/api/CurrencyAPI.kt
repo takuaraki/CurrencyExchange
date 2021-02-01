@@ -7,14 +7,14 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 
-interface CurrencyService {
+interface CurrencyAPI {
     @GET("/live")
     suspend fun getExchangeRates(): ExchangeRatesResponse
 
     companion object {
         private const val BASE_URL = "http://api.currencylayer.com"
 
-        fun create(): CurrencyService {
+        fun create(): CurrencyAPI {
             val client = OkHttpClient.Builder()
                 .addInterceptor(object : Interceptor {
                     override fun intercept(chain: Interceptor.Chain): Response {
@@ -33,7 +33,7 @@ interface CurrencyService {
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
-                .create(CurrencyService::class.java)
+                .create(CurrencyAPI::class.java)
         }
     }
 }
