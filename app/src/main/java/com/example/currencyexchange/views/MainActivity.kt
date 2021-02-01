@@ -10,10 +10,14 @@ import androidx.core.widget.doOnTextChanged
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
+import androidx.room.Room
 import com.example.currencyexchange.R
 import com.example.currencyexchange.databinding.ActivityMainBinding
 import com.example.currencyexchange.models.data.ExchangeRate
 import com.example.currencyexchange.models.repository.CurrencyRepository
+import com.example.currencyexchange.models.repository.CurrencyRepositoryImpl
+import com.example.currencyexchange.models.repository.api.CurrencyAPI
+import com.example.currencyexchange.models.repository.dao.AppDatabase
 import com.example.currencyexchange.models.store.CurrencyStoreImpl
 import com.example.currencyexchange.viewmodels.CurrencyExchangeViewModel
 import kotlinx.coroutines.flow.Flow
@@ -31,7 +35,18 @@ class MainActivity : AppCompatActivity() {
 
         viewModel = ViewModelProvider(
             this,
-            CurrencyExchangeViewModel.Factory(CurrencyStoreImpl(repository = DebugRepo()))
+            CurrencyExchangeViewModel.Factory(
+                CurrencyStoreImpl(
+                    repository = CurrencyRepositoryImpl(
+                        api = CurrencyAPI.create(),
+                        db = Room.databaseBuilder(
+                            this,
+                            AppDatabase::class.java,
+                            "database"
+                        ).build()
+                    )
+                )
+            )
         ).get(CurrencyExchangeViewModel::class.java)
 
         adapter = ExchangedListAdapter()
@@ -73,6 +88,11 @@ class MainActivity : AppCompatActivity() {
         viewModel.exchanged.observe(this) { exchangedList ->
             adapter.submitList(exchangedList)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.onResume()
     }
 }
 

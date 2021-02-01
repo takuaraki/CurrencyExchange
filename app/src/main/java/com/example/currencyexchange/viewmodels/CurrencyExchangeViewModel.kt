@@ -33,4 +33,10 @@ class CurrencyExchangeViewModel(
             store.selectCurrencyCode(code)
         }
     }
+
+    fun onResume() {
+        viewModelScope.launch {
+            store.load()
+        }
+    }
 }

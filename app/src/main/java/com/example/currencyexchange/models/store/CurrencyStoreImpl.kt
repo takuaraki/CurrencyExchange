@@ -33,6 +33,10 @@ class CurrencyStoreImpl(private val repository: CurrencyRepository) :
     private val _amount = ConflatedBroadcastChannel<Int>(value = 0)
     private val _currencyCode = ConflatedBroadcastChannel<String>(value = "USD")
 
+    override suspend fun load() {
+        repository.load()
+    }
+
     override suspend fun setAmount(amount: Int) {
         _amount.send(amount)
     }

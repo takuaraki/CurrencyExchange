@@ -7,6 +7,7 @@ interface CurrencyStore {
     val supportedCurrencyCodes: Flow<List<String>>
     val exchanged: Flow<List<Money>>
 
+    suspend fun load()
     suspend fun setAmount(amount: Int)
     suspend fun selectCurrencyCode(currencyCode: String)
 }
