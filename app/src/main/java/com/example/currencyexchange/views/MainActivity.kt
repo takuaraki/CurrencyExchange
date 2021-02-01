@@ -2,6 +2,10 @@ package com.example.currencyexchange.views
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Spinner
 import androidx.core.widget.doOnTextChanged
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
@@ -39,12 +43,26 @@ class MainActivity : AppCompatActivity() {
 
     private fun setInputs() {
         binding.amountEditText.doOnTextChanged { text, _, _, _ ->
-            viewModel.onAmountTextChanged(text = text.toString())
+            viewModel.onAmountTextChanged(text.toString())
         }
 
+        binding.currencySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val spinner: Spinner = parent as Spinner
+                val code: String = spinner.selectedItem as String
+                viewModel.onSelectCurrencyCode(code)
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+            }
+        }
     }
 
     private fun handleOutputs() {
+        viewModel.supportedCurrencyCodes.observe(this) { currencyCodes ->
+            binding.currencySpinner.adapter = ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, currencyCodes)
+        }
+
         viewModel.exchanged.observe(this) { exchangedList ->
             adapter.submitList(exchangedList)
         }

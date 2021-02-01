@@ -6,9 +6,14 @@ import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
 
 class CurrencyStoreImpl(private val repository: CurrencyRepository) :
     CurrencyStore {
+    override val supportedCurrencyCodes: Flow<List<String>>
+        get() = repository.exchangeRates.map { exchangeRates ->
+            exchangeRates.map { exchangeRate -> exchangeRate.to }
+        }
     override val exchanged: Flow<List<Money>>
         get() = combine(
             repository.exchangeRates,
