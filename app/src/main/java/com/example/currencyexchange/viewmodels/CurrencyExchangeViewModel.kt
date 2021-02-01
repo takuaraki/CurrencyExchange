@@ -21,4 +21,11 @@ class CurrencyExchangeViewModel(
     }
 
     val exchanged: LiveData<List<Money>> = store.exchanged.asLiveData()
+
+    fun onAmountTextChanged(text: String) {
+    }
+
+    fun onSelectCurrencyCode(code: String) {
+
+    }
 }

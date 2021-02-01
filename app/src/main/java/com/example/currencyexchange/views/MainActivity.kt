@@ -2,6 +2,7 @@ package com.example.currencyexchange.views
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.core.widget.doOnTextChanged
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
@@ -19,18 +20,33 @@ import kotlinx.coroutines.flow.flowOf
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private lateinit var viewModel: CurrencyExchangeViewModel
+    private lateinit var adapter: ExchangedListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
-        val viewModel = ViewModelProvider(
+        viewModel = ViewModelProvider(
             this,
             CurrencyExchangeViewModel.Factory(CurrencyExchangeStoreImpl(repository = DebugRepo()))
         ).get(CurrencyExchangeViewModel::class.java)
 
-        val adapter = ExchangedListAdapter()
+        adapter = ExchangedListAdapter()
         binding.exchangedRecyclerView.adapter = adapter
+
+        setInputs()
+        handleOutputs()
+    }
+
+    private fun setInputs() {
+        binding.amountEditText.doOnTextChanged { text, _, _, _ ->
+            viewModel.onAmountTextChanged(text = text.toString())
+        }
+
+    }
+
+    private fun handleOutputs() {
         viewModel.exchanged.observe(this) { exchangedList ->
             adapter.submitList(exchangedList)
         }
