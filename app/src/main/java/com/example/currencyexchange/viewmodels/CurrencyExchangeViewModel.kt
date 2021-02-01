@@ -5,19 +5,20 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.asLiveData
 import com.example.currencyexchange.models.data.Money
-import com.example.currencyexchange.models.repository.CurrencyExchangedRepository
+import com.example.currencyexchange.models.repository.ExchangeRateRepository
+import com.example.currencyexchange.models.store.CurrencyExchangeStore
 
 class CurrencyExchangeViewModel(
-    private val currencyExchangeRepository: CurrencyExchangedRepository
+    private val store: CurrencyExchangeStore
 ): ViewModel() {
     class Factory constructor(
-        private val currencyExchangeRepository: CurrencyExchangedRepository
+        private val store: CurrencyExchangeStore
     ): ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T =
             CurrencyExchangeViewModel(
-                currencyExchangeRepository = currencyExchangeRepository
+                store = store
             ) as T
     }
 
-    val exchanged: LiveData<List<Money>> = currencyExchangeRepository.exchanged.asLiveData()
+    val exchanged: LiveData<List<Money>> = store.exchanged.asLiveData()
 }
