@@ -1,5 +1,6 @@
 package com.example.currencyexchange.views
 
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -17,6 +18,7 @@ import com.example.currencyexchange.models.data.ExchangeRate
 import com.example.currencyexchange.models.repository.CurrencyRepository
 import com.example.currencyexchange.models.repository.CurrencyRepositoryImpl
 import com.example.currencyexchange.models.repository.api.CurrencyAPI
+import com.example.currencyexchange.models.repository.api.ExchangeRatesResponse
 import com.example.currencyexchange.models.repository.dao.AppDatabase
 import com.example.currencyexchange.models.store.CurrencyStoreImpl
 import com.example.currencyexchange.viewmodels.CurrencyExchangeViewModel
@@ -38,12 +40,13 @@ class MainActivity : AppCompatActivity() {
             CurrencyExchangeViewModel.Factory(
                 CurrencyStoreImpl(
                     repository = CurrencyRepositoryImpl(
-                        api = CurrencyAPI.create(),
+                        api = DebugAPI(),
                         db = Room.databaseBuilder(
                             this,
                             AppDatabase::class.java,
                             "database"
-                        ).build()
+                        ).build(),
+                        preferences = getSharedPreferences("currencyExchange", Context.MODE_PRIVATE)
                     )
                 )
             )
@@ -96,19 +99,16 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
-class DebugRepo : CurrencyRepository {
-    override val exchangeRates: Flow<List<ExchangeRate>>
-        get() = flowOf(
-            listOf(
-                ExchangeRate(from = "USD", to = "USD", rate = 1f),
-                ExchangeRate(from = "USD", to = "JPY", rate = 100f),
-                ExchangeRate(from = "USD", to = "AAA", rate = 50f),
-                ExchangeRate(from = "USD", to = "BBB", rate = 1000f),
-                ExchangeRate(from = "USD", to = "CCC", rate = 25f),
-            )
-        )
-
-    override suspend fun load() {
-        // do nothing
+class DebugAPI: CurrencyAPI {
+    override suspend fun getExchangeRates(): ExchangeRatesResponse {
+        return ExchangeRatesResponse(quotes = mapOf(
+            "USDUSD" to 1f,
+            "USDJPY" to 100f,
+            "USDAAA" to 50f,
+            "USDBBB" to 1000f,
+            "USDCCC" to 25f,
+            "USDDDD" to 10f,
+            "USDEEE" to 5f,
+        ))
     }
 }
