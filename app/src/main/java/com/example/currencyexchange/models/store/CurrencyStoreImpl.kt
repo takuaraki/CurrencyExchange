@@ -1,14 +1,14 @@
 package com.example.currencyexchange.models.store
 
 import com.example.currencyexchange.models.data.Money
-import com.example.currencyexchange.models.repository.ExchangeRateRepository
+import com.example.currencyexchange.models.repository.CurrencyRepository
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.combine
 
-class CurrencyExchangeStoreImpl(private val repository: ExchangeRateRepository) :
-    CurrencyExchangeStore {
+class CurrencyStoreImpl(private val repository: CurrencyRepository) :
+    CurrencyStore {
     override val exchanged: Flow<List<Money>>
         get() = combine(
             repository.exchangeRates,

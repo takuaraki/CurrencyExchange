@@ -9,10 +9,8 @@ import androidx.lifecycle.observe
 import com.example.currencyexchange.R
 import com.example.currencyexchange.databinding.ActivityMainBinding
 import com.example.currencyexchange.models.data.ExchangeRate
-import com.example.currencyexchange.models.data.Money
-import com.example.currencyexchange.models.repository.ExchangeRateRepository
-import com.example.currencyexchange.models.store.CurrencyExchangeStore
-import com.example.currencyexchange.models.store.CurrencyExchangeStoreImpl
+import com.example.currencyexchange.models.repository.CurrencyRepository
+import com.example.currencyexchange.models.store.CurrencyStoreImpl
 import com.example.currencyexchange.viewmodels.CurrencyExchangeViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
@@ -29,7 +27,7 @@ class MainActivity : AppCompatActivity() {
 
         viewModel = ViewModelProvider(
             this,
-            CurrencyExchangeViewModel.Factory(CurrencyExchangeStoreImpl(repository = DebugRepo()))
+            CurrencyExchangeViewModel.Factory(CurrencyStoreImpl(repository = DebugRepo()))
         ).get(CurrencyExchangeViewModel::class.java)
 
         adapter = ExchangedListAdapter()
@@ -53,7 +51,7 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
-class DebugRepo : ExchangeRateRepository {
+class DebugRepo : CurrencyRepository {
     override val exchangeRates: Flow<List<ExchangeRate>>
         get() = flowOf(
             listOf(
