@@ -41,11 +41,13 @@ class MainActivity : AppCompatActivity() {
                 CurrencyStoreImpl(
                     repository = CurrencyRepositoryImpl(
                         api = DebugAPI(),
-                        db = Room.databaseBuilder(
+                        dao = Room.databaseBuilder(
                             this,
                             AppDatabase::class.java,
                             "database"
-                        ).build(),
+                        )
+                            .build()
+                            .exchangeRateDao(),
                         preferences = getSharedPreferences("currencyExchange", Context.MODE_PRIVATE)
                     )
                 )
@@ -99,16 +101,18 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
-class DebugAPI: CurrencyAPI {
+class DebugAPI : CurrencyAPI {
     override suspend fun getExchangeRates(): ExchangeRatesResponse {
-        return ExchangeRatesResponse(quotes = mapOf(
-            "USDUSD" to 1f,
-            "USDJPY" to 100f,
-            "USDAAA" to 50f,
-            "USDBBB" to 1000f,
-            "USDCCC" to 25f,
-            "USDDDD" to 10f,
-            "USDEEE" to 5f,
-        ))
+        return ExchangeRatesResponse(
+            quotes = mapOf(
+                "USDUSD" to 1f,
+                "USDJPY" to 100f,
+                "USDAAA" to 50f,
+                "USDBBB" to 1000f,
+                "USDCCC" to 25f,
+                "USDDDD" to 10f,
+                "USDEEE" to 5f,
+            )
+        )
     }
 }

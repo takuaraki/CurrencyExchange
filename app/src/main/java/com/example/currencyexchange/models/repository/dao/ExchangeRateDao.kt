@@ -13,5 +13,5 @@ interface ExchangeRateDao {
     fun getExchangeRates(): Flow<List<ExchangeRate>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertOfUpdate(exchangeRate: ExchangeRate)
+    suspend fun insertOrUpdate(exchangeRate: ExchangeRate)
 }
